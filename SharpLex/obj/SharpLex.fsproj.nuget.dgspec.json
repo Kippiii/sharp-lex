@@ -1,0 +1,67 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/fcorp/Documents/sharp-lex/SharpLex/SharpLex.fsproj": {}
+  },
+  "projects": {
+    "/home/fcorp/Documents/sharp-lex/SharpLex/SharpLex.fsproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/fcorp/Documents/sharp-lex/SharpLex/SharpLex.fsproj",
+        "projectName": "SharpLex",
+        "projectPath": "/home/fcorp/Documents/sharp-lex/SharpLex/SharpLex.fsproj",
+        "packagesPath": "/home/fcorp/.nuget/packages/",
+        "outputPath": "/home/fcorp/Documents/sharp-lex/SharpLex/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/fcorp/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "/home/fcorp/.dotnet/sdk/8.0.101/FSharp/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "FSharp.Core": {
+              "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[8.0.101, )",
+              "generatePathProperty": true
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true,
+              "generatePathProperty": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "/home/fcorp/.dotnet/sdk/8.0.101/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

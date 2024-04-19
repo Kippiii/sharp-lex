@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="Token.fs" />
+        <Compile Include="Specification.fs" />
+        <Compile Include="Automata.fs" />
+        <Compile Include="Lexer.fs" />
+    </ItemGroup>
+    <ItemGroup>
+        
+    </ItemGroup>
+</Project>

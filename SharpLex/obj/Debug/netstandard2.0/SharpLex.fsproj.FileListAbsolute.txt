@@ -1,0 +1,5 @@
+/home/fcorp/Documents/sharp-lex/SharpLex/obj/Debug/netstandard2.0/SharpLex.fsproj.AssemblyReference.cache
+/home/fcorp/Documents/sharp-lex/SharpLex/obj/Debug/netstandard2.0/SharpLex.AssemblyInfoInputs.cache
+/home/fcorp/Documents/sharp-lex/SharpLex/obj/Debug/netstandard2.0/SharpLex.AssemblyInfo.fs
+/home/fcorp/Documents/sharp-lex/SharpLex/obj/Debug/netstandard2.0/SharpLex.fsproj.CoreCompileInputs.cache
+/home/fcorp/Documents/sharp-lex/SharpLex/obj/Debug/netstandard2.0/SharpLex.sourcelink.json

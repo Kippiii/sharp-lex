@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "ZG/fDPShH5P2c59izV90UqSgHHg04HsR9VghqcdPMZzTq84bBec1NoKmxq5W4f5pcJIIRcvUYexrkAsGscm7yg==",
+  "success": true,
+  "projectFilePath": "/home/fcorp/Documents/sharp-lex/SharpLex/SharpLex.fsproj",
+  "expectedPackageFiles": [
+    "/home/fcorp/.nuget/packages/fsharp.core/8.0.101/fsharp.core.8.0.101.nupkg.sha512",
+    "/home/fcorp/.nuget/packages/microsoft.netcore.platforms/1.1.0/microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "/home/fcorp/.nuget/packages/netstandard.library/2.0.3/netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
