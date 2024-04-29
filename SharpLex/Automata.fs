@@ -4,7 +4,7 @@
 module Automata
 
 // Type for regular expressions
-type Regex = todo
+type Regex = RegularExpressions.Regex
 
 // Converts a string to a regular expression
 let makeRegex (str : string) : Regex = todo
