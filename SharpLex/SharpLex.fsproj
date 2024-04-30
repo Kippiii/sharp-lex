@@ -3,8 +3,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Utilities.fs" />
     <Compile Include="Stack.fs" />
-    <Compile Include="RegularExpressions.fs" />
+    <Compile Include="RegularExpression.fs" />
     <Compile Include="Token.fs" />
     <Compile Include="Specification.fs" />
     <Compile Include="Automata.fs" />

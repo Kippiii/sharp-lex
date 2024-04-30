@@ -21,6 +21,8 @@ type Regex =
     | Char of char
     | Empty
 
+exception RegexParseError of string
+
 let all_chars: char list = List.map char [0..255]
 let not_chars (cs: char list) : char list =
     let arr = [|for i in 0 .. 255 -> false|]
@@ -35,6 +37,7 @@ let rec make_or (cs: char list) : Regex =
     match cs with
     | [c] -> Char c
     | c :: rest -> Alter (Char c, make_or rest)
+    | [] -> Empty
 
 let rec concat_n_times (re: Regex) (n: int) : Regex =
     if n > 1 then
@@ -47,7 +50,7 @@ let rec concat_up_to_n (re: Regex) (n: int) : Regex =
     else
         Empty
 
-let process (str: string) : Regex =
+let process_string (str: string) : Regex =
     let mutable cs = Stack.from_list <| Seq.toList str
     let mutable ops = Stack.empty ()
     let mutable results = Stack.empty ()
@@ -75,7 +78,7 @@ let process (str: string) : Regex =
             let b = Stack.pop &results
             Stack.push &results (Concat (a, b))
         | Paren ->
-            raise "ERROR! Unclosed parentheses"
+            raise <| RegexParseError "Unclosed Parentheses"
     let add_to_stack (op : RegexOp) : unit =
         match op with
         | SStar | SPlus | SOption | SMatch (_, _) | Paren | SConcat ->
@@ -89,22 +92,21 @@ let process (str: string) : Regex =
             None
         else
             let mutable i = 0
-            while cs.Length > 0 && Char.IsDigit (Stack.peek &cs) do
+            while Stack.length cs > 0 && Char.IsDigit (Stack.peek &cs) do
                 let j = int (Stack.pop &cs) - int '0'
                 i <- i*10 + j
             Some i
-    while cs.Length > 0 do
+    while Stack.length cs > 0 do
         let cur = Stack.pop &cs
         match cur with
         | '(' ->
             add_to_stack Paren
         | ')' ->
-            while (ops.Length > 0 && Stack.peek &ops <> Paren) do
+            while (Stack.length ops > 0 && Stack.peek &ops <> Paren) do
                 pop_stack ()
-            if ops.Length = 0 then
-                raise "Too many close parens"
-            Stack.pop &ops
-            ()
+            if Stack.length ops = 0 then
+                raise <| RegexParseError "Closing Unopened Parentheses"
+            Stack.pop &ops |> ignore
         | '.' ->
             Stack.push &results (make_or all_chars)
         | '*' ->
@@ -121,22 +123,22 @@ let process (str: string) : Regex =
             let upper =
                 match Stack.peek &cs with
                 | ',' ->
-                    Stack.pop &cs
+                    Stack.pop &cs |> ignore
                     let i = read_int ()
                     if Stack.pop &cs <> '}' then
-                        raise "ERROR!"
+                        raise <| RegexParseError "Expecting '}'"
                     i
                 | '}' ->
-                    Stack.pop &cs
+                    Stack.pop &cs |> ignore
                     None
                 | _ ->
-                    raise "ERROR!"
+                    raise <| RegexParseError "Expect ',' or '}'"
             let to_add =
                 match (lower, upper) with
                 | (Some i, Some j) -> SMatch (i, j)
                 | (None, Some j) -> SMatch (0, j)
                 | (Some i, None) -> SMatch (i, Int32.MaxValue)
-                | _ -> raise "ERROR!"
+                | _ -> raise <| RegexParseError "No ints between '{' and '}'"
             add_to_stack to_add
             pop_stack ()
         | '|' ->
@@ -144,19 +146,18 @@ let process (str: string) : Regex =
         | '[' ->
             let is_not =
                 if Stack.peek &cs = '^' then
-                    Stack.pop &cs
+                    Stack.pop &cs |> ignore
                     true
                 else
                     false
             let mutable chars = []
             if Stack.peek &cs = ']' then
                 chars <- ']' :: chars
-                Stack.pop &cs
-                ()
-            while cs.Length > 0 && Stack.peek &cs <> ']' do
-                chars <- pop &cs :: chars
-            if cs.Length = 0 then
-                raise "ERROR! Did not close ']'"
+                Stack.pop &cs |> ignore
+            while Stack.length cs > 0 && Stack.peek &cs <> ']' do
+                chars <- Stack.pop &cs :: chars
+            if Stack.length cs = 0 then
+                raise <| RegexParseError "Missing ']'"
             let to_add =
                 if is_not then
                     make_or (not_chars chars)
@@ -178,23 +179,15 @@ let process (str: string) : Regex =
                 | 'x' -> 
                     let h1 = Stack.pop &cs
                     let h2 = Stack.pop &cs
-                    let get_hex (h: char) : int =
-                        if int h >= int '0' && int h <= int '9' then
-                            int h - int '0'
-                        elif int h >= int 'A' && int h <= int 'F' then
-                            int h - int 'A' + 10
-                        elif int h >= int 'a' && int h <= int 'f' then
-                            int h - int 'a' + 10
-                        else
-                            raise "Invalid hex!"
-                    char (get_hex h1 * 16 + get_hex h2)
+                    char <| Utilities.parse_hex $"{h1}{h2}"
+                | _ -> raise <| RegexParseError "Invalid Character after '\\'"
             add_to_stack SConcat
             Stack.push &results (Char to_add)
         | c ->
             add_to_stack SConcat
             Stack.push &results (Char c)
-    while ops.Length > 0 do
+    while Stack.length ops > 0 do
         pop_stack ()
-    if results.Length <> 1 then
-        raise "ERROR!"
+    if Stack.length results <> 1 then
+        raise <| RegexParseError "Expecting more operators (contact devs)"
     Stack.pop &results
